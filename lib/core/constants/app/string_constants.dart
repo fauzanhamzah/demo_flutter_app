@@ -10,6 +10,8 @@ class StringConstants {
   static const String loginTitle = "You can log in with your information.";
   static const String loginButtonText = "LOGIN";
   static const String emailTitle = "Email";
+  static const String userNameTitle = "User Name";
+  static const String userNameHint = "Please Input Your Username";
   static const String passwordTitle = "Password";
   static const String emailHint = 'example@gmail.com';
   static const String passwordHint = '···········';

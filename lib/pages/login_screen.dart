@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
   bool? get validate => _formKey.currentState?.validate();
 
   @override
@@ -36,7 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const _LogoAndTitleWidget(),
-                _EmailFormField(emailController: emailController),
+                // _EmailFormField(emailController: emailController),
+                _UserNameField(userNameController: userNameController),
                 _PasswordFormField(passwordController: passwordController),
                 _LoginButton(
                   onTap: () {
@@ -85,27 +87,49 @@ class _LogoAndTitleWidget extends StatelessWidget {
   }
 }
 
-class _EmailFormField extends StatelessWidget {
-  const _EmailFormField({
-    required this.emailController,
+class _UserNameField extends StatelessWidget {
+  const _UserNameField({
+    required this.userNameController,
   });
 
-  final TextEditingController emailController;
+  final TextEditingController userNameController;
 
   @override
   Widget build(BuildContext context) {
     return TextFormFieldWidget(
-      controller: emailController,
-      title: StringConstants.emailTitle,
-      hintText: StringConstants.emailHint,
-      keyboardType: TextInputType.emailAddress,
+      controller: userNameController,
+      title: StringConstants.userNameTitle,
+      hintText: StringConstants.userNameHint,
+      keyboardType: TextInputType.text,
       onSaved: (value) {
-        emailController.text = value!;
+        userNameController.text = value!;
       },
-      validator: (value) => ValidateOperations.emailValidation(value),
+      validator: (value) => ValidateOperations.normalValidation(value),
     );
   }
 }
+
+// class _EmailFormField extends StatelessWidget {
+//   const _EmailFormField({
+//     required this.emailController,
+//   });
+
+//   final TextEditingController emailController;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextFormFieldWidget(
+//       controller: emailController,
+//       title: StringConstants.emailTitle,
+//       hintText: StringConstants.emailHint,
+//       keyboardType: TextInputType.emailAddress,
+//       onSaved: (value) {
+//         emailController.text = value!;
+//       },
+//       validator: (value) => ValidateOperations.emailValidation(value),
+//     );
+//   }
+// }
 
 class _PasswordFormField extends StatelessWidget {
   const _PasswordFormField({
