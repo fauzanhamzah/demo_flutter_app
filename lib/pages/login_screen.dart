@@ -1,6 +1,8 @@
+import 'package:demo_flutter_app/core/bloc/auth/bloc/auth_bloc.dart';
 import 'package:demo_flutter_app/core/extensions/context_extensions.dart';
 import 'package:demo_flutter_app/core/extensions/num_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../core/components/button/button.dart';
 import '../core/components/text/custom_text.dart';
@@ -17,7 +19,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   bool? get validate => _formKey.currentState?.validate();
@@ -43,12 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 _LoginButton(
                   onTap: () {
                     if (validate != null && validate == true) {
-                      // context.read<AuthBloc>().add(LoginRequested(
-                      //       emailController.text.trim(),
-                      //       passwordController.text.trim(),
-                      //     ));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Lolos Validasi')));
+                      context.read<AuthBloc>().add(LoginRequested(
+                            userNameController.text.trim(),
+                            passwordController.text.trim(),
+                          ));
                     }
                   },
                 ),
@@ -108,28 +107,6 @@ class _UserNameField extends StatelessWidget {
     );
   }
 }
-
-// class _EmailFormField extends StatelessWidget {
-//   const _EmailFormField({
-//     required this.emailController,
-//   });
-
-//   final TextEditingController emailController;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextFormFieldWidget(
-//       controller: emailController,
-//       title: StringConstants.emailTitle,
-//       hintText: StringConstants.emailHint,
-//       keyboardType: TextInputType.emailAddress,
-//       onSaved: (value) {
-//         emailController.text = value!;
-//       },
-//       validator: (value) => ValidateOperations.emailValidation(value),
-//     );
-//   }
-// }
 
 class _PasswordFormField extends StatelessWidget {
   const _PasswordFormField({

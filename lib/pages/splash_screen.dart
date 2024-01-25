@@ -1,6 +1,12 @@
+import 'dart:async';
+
+import 'package:demo_flutter_app/core/bloc/auth/bloc/auth_bloc.dart';
 import 'package:demo_flutter_app/core/extensions/context_extensions.dart';
-import 'package:demo_flutter_app/pages/login_screen.dart';
+import 'package:demo_flutter_app/core/extensions/navigate_extension.dart';
+import 'package:demo_flutter_app/core/utils/navigate_util.dart';
+// import 'package:demo_flutter_app/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,17 +19,14 @@ class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late Animation<double> _animation;
   late AnimationController _controller;
-  String _textloading = 'Initial Data...';
-
-  void _changeTextLoading() {
-    setState(() {
-      _textloading = 'Init Compleate';
-    });
-  }
+  final String _textloading = 'Initial Data...';
+  late final AuthBloc authBloc;
+  late StreamSubscription authStream;
 
   @override
   void initState() {
     super.initState();
+    authBloc = context.read<AuthBloc>()..add(AppStarted());
 
     /// For [animation]
     _controller = AnimationController(
@@ -31,11 +34,9 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     )..repeat();
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
-    Future.delayed(const Duration(seconds: 2), () {
-      // deleayed code here
-      _changeTextLoading();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => const LoginScreen()));
+    authStream = authBloc.stream.listen((state) {
+      Future.delayed(const Duration(seconds: 2)).then((_) =>
+          NavigateUtil().navigateToView(context, state.status.firstView));
     });
   }
 
@@ -66,6 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
+    authStream.cancel();
     _controller.dispose();
     super.dispose();
   }

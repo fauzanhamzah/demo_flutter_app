@@ -1,5 +1,5 @@
 enum NetworkEnums {
-  login('login'),
+  login('LoginAD/Login'),
   introOff('introOff'),
   token('token');
 
